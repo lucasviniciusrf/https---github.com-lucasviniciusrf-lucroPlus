@@ -1,0 +1,87 @@
+from PyQt5 import uic, QtWidgets
+
+
+# Criar uma lista global para armazenar os valores inseridos
+valores = []
+
+def funcao_principal():
+    # Obter os valores dos campos de texto
+    linha1 = venda.lineEdit.text()
+    linha2 = venda.lineEdit_2.text()
+    linha3 = venda.lineEdit_3.text()
+
+    # Adicionar os valores inseridos à lista
+    if linha1.isdigit() and linha2.isdigit() and linha3.isdigit():
+        valores.append((int(linha1), int(linha2), int(linha3)))
+        
+        # Limpar os campos de texto para novos valores
+        venda.lineEdit.setText("")
+        venda.lineEdit_2.setText("")
+        venda.lineEdit_3.setText("")
+
+def calcular_soma():
+    # Calcular a soma de todos os valores inseridos
+    soma_total = sum([sum(item) for item in valores])  # soma cada tupla e depois soma total
+    print(f"Soma total das vendas: {soma_total}")
+    
+    
+somaGastos = []
+
+def vemsegundaJanela():
+    gastos.show()
+
+    # Obter os valores inseridos nos campos de texto da segunda janela
+    linhaGasto1 = gastos.lineEdit_4.text()
+    linhaGasto2 = gastos.lineEdit.text()
+    linhaGasto3 = gastos.lineEdit_2.text()
+
+    # Verificar se os valores são válidos (não vazios e numéricos)
+    if linhaGasto1.isdigit() and linhaGasto2.isdigit() and linhaGasto3.isdigit():
+        # Adicionar itens à lista de gastos
+        somaGastos.append((int(linhaGasto1), int(linhaGasto2), int(linhaGasto3)))
+        
+        # Limpar os campos de texto da segunda janela
+        gastos.lineEdit_4.setText("")
+        gastos.lineEdit.setText("")
+        gastos.lineEdit_2.setText("")
+
+def calculoDosGastos():
+    # Calcular a soma dos gastos inseridos
+    soma_total_gastos = sum([sum(item) for item in somaGastos])  # soma cada tupla de gastos e depois soma total
+    print(f"Soma total dos gastos: {soma_total_gastos}")
+
+# Função para calcular o lucro final (subtração das vendas pelos gastos)
+def ultimoProcesso():
+    lucroFinal.show()
+    
+    # Soma total das vendas
+    soma_vendas = sum([sum(item) for item in valores])
+    
+    # Soma total dos gastos
+    soma_gastos = sum([sum(item) for item in somaGastos])
+    
+    # Calcular lucro final
+    lucro_final = soma_vendas - soma_gastos
+    print(f"Lucro final: {lucro_final}")
+
+    # Exibir o valor do lucro final na interface (campo de texto)
+    lucroFinal.lucro_label.setText(f"Lucro: R${lucro_final:.2f}")  # Atualiza o label com o lucro
+
+app = QtWidgets.QApplication([])
+
+# Carregar a interface do usuário
+venda = uic.loadUi("venda.ui")
+gastos = uic.loadUi("gastos.ui")
+lucroFinal = uic.loadUi("lucroFinal.ui")
+
+# Conectar os botões às funções correspondentes
+venda.pushButton.clicked.connect(funcao_principal)
+venda.pushButton_2.clicked.connect(calcular_soma)
+venda.pushButton_2.clicked.connect(vemsegundaJanela)
+gastos.pushButton_3.clicked.connect(vemsegundaJanela)
+gastos.pushButton_3.clicked.connect(calculoDosGastos)
+gastos.pushButton_4.clicked.connect(ultimoProcesso)
+
+# Exibir a interface do usuário
+venda.show()
+app.exec()
